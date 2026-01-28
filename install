@@ -1,0 +1,6 @@
+#!/bin/env bash
+
+. gy_support
+
+
+install /etc/profile.d/yk_support.sh /usr/local/etc/yk_support_for_sh/profile.d/{end.sh,err.sh,fpid.sh,local_profile.sh,_temp_path.sh,temp_path.sh}
