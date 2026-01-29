@@ -1,4 +1,6 @@
-
+echo "$$ $ZSH_VERSION:$BASH_VERSION:$SHELL" >> ~/.require.log
+echo "$$:yk_support.sh started" >> ~/.require.log
+type __yk_support_for_sh_loaded >>~/.require.log 2>&1
 if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
     . /usr/local/lib/yk_support_for_sh/err.sh
     __yk_support_for_sh_loaded(){
@@ -12,6 +14,7 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
                 if [ -n "$vnc" ]; then
                     continue
                 fi
+				echo "$$:loaded $i" >> ~/.require.log
                 local module_name="$i"
                 local yk_module_path="$YK_SUPPORT_LIB_SH/$module_name.sh"
                 local module_content=""
@@ -33,6 +36,7 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
         __yk_load_profile_d(){
             for i in $YK_SUPPORT_PROFILE_SH/*.sh; do
                 if [ "$(readlink -f "$i" >/dev/null 2>&1)" == "$(readlink -f "$YK_SUPPORT_LIB_SH/$(basename -- "$i")" >/dev/null 2>&1)" ]; then
+					echo "$$:requiring $i from yk_support.sh" >> ~/.require.log
                     require $(basename -- "${i%.sh}")
                 else
                     [ -r "$i" ] && . "$i"
@@ -47,6 +51,9 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
             __yk_load_profile_d
         fi
     }
+	echo "$$:__yk_support_for_sh_loaded" >> ~/.require.log 
     __yk_support_for_sh_loaded
 fi
+echo "$$:yk_support.sh finished" >> ~/.require.log
+type __yk_support_for_sh_loaded >>~/.require.log 2>&1
 
