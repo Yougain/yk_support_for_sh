@@ -1,11 +1,9 @@
-echo "$$ $ZSH_VERSION:$BASH_VERSION:$SHELL" >> ~/.require.log
-echo "$$:yk_support.sh started" >> ~/.require.log
-type __yk_support_for_sh_loaded >>~/.require.log 2>&1
+
 if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
     . /usr/local/lib/yk_support_for_sh/err.sh
     __yk_support_for_sh_loaded(){
         YK_SUPPORT_LIB_SH=/usr/local/lib/yk_support_for_sh
-        YK_SUPPORT_PROFILE_SH=/usr/local/etc/yk_support_for_sh/profile.d
+        YK_SUPPORT_SHRC_D=/usr/local/etc/yk_support_for_sh/shrc.d
         require(){
             local i
             for i in "$@"; do
@@ -14,7 +12,6 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
                 if [ -n "$vnc" ]; then
                     continue
                 fi
-				echo "$$:loaded $i" >> ~/.require.log
                 local module_name="$i"
                 local yk_module_path="$YK_SUPPORT_LIB_SH/$module_name.sh"
                 local module_content=""
@@ -34,9 +31,13 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
             done
         }
         __yk_load_profile_d(){
-            for i in $YK_SUPPORT_PROFILE_SH/*.sh; do
-                if [ "$(readlink -f "$i" >/dev/null 2>&1)" == "$(readlink -f "$YK_SUPPORT_LIB_SH/$(basename -- "$i")" >/dev/null 2>&1)" ]; then
-					echo "$$:requiring $i from yk_support.sh" >> ~/.require.log
+            if [ -n "$BASH_VERSION" ]; then
+                shopt -s nullglob 2>/dev/null || true
+            elif [ -n "$ZSH_VERSION" ]; then
+                setopt nullglob 2>/dev/null || true
+            fi
+            for i in $YK_SUPPORT_SHRC_D/*.sh; do
+                if [ "$(readlink -f "$i" >/dev/null 2>&1)" = "$(readlink -f "$YK_SUPPORT_LIB_SH/$(basename -- "$i")" >/dev/null 2>&1)" ]; then
                     require $(basename -- "${i%.sh}")
                 else
                     [ -r "$i" ] && . "$i"
@@ -51,9 +52,6 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
             __yk_load_profile_d
         fi
     }
-	echo "$$:__yk_support_for_sh_loaded" >> ~/.require.log 
     __yk_support_for_sh_loaded
 fi
-echo "$$:yk_support.sh finished" >> ~/.require.log
-type __yk_support_for_sh_loaded >>~/.require.log 2>&1
 

@@ -3,5 +3,16 @@
 . gy_support
 
 
-install yk_support.sh /etc/profile.d
 install end.sh err.sh fpid.sh local_profile.sh _temp_path.sh temp_path.sh /usr/local/lib/yk_support_for_sh
+install yk_support.sh /usr/local/etc/shrc.d
+
+#install_lines /etc/skel/.zshrc <<END
+install_lines .zshrc .bashrc <<END
+    shopt -s nullglob 2>/dev/null || true
+    for i in /usr/local/etc/shrc.d/*.sh; do
+        if [ -r "\$i" ]; then
+            . "\$i"
+        fi
+    done
+    unset i
+END
