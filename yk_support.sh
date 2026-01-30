@@ -31,12 +31,10 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
             done
         }
         __yk_load_profile_d(){
-            if [ -n "$BASH_VERSION" ]; then
-                shopt -s nullglob 2>/dev/null || true
-            elif [ -n "$ZSH_VERSION" ]; then
-                setopt nullglob 2>/dev/null || true
-            fi
             for i in $YK_SUPPORT_SHRC_D/*.sh; do
+                if [ "$i" = "$YK_SUPPORT_SHRC_D/*.sh" ]; then
+                    break
+                fi
                 if [ "$(readlink -f "$i" >/dev/null 2>&1)" = "$(readlink -f "$YK_SUPPORT_LIB_SH/$(basename -- "$i")" >/dev/null 2>&1)" ]; then
                     require $(basename -- "${i%.sh}")
                 else

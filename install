@@ -8,8 +8,10 @@ install yk_support.sh /usr/local/etc/shrc.d
 
 #install_lines /etc/skel/.zshrc <<END
 install_lines .zshrc .bashrc <<END
-    shopt -s nullglob 2>/dev/null || true
     for i in /usr/local/etc/shrc.d/*.sh; do
+        if [ "\$i" = "/usr/local/etc/shrc.d/*.sh" ]; then
+            break
+        fi
         if [ -r "\$i" ]; then
             . "\$i"
         fi
