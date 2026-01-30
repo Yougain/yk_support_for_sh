@@ -6,9 +6,9 @@ END << 'EOF'
 EOF
 
 local dir
-for dir in /tmp/yktmp_dir.*; do
-    if [ ${dir%%-*} != "/tmp/yktmp_dir.$SYS_BOOT_ID" ]; then
-        rm -rf "$dir" 2>/dev/null || true
+for dir in /tmp/yk_tmp_dir.*; do
+    if [ ${dir%%-*} != "/tmp/yk_tmp_dir.$SYS_BOOT_ID" -a -w "$dir" ]; then
+        rm -rf "$dir"
     fi
 done
 
