@@ -3,4 +3,6 @@
 . $(dirname $0)/gyi
 
 install end.sh err.sh fpid.sh local_profile.sh _temp_path.sh temp_path.sh yk_support.sh /lib/yk_support_for_sh
+install {colors,fpath,prompt,zed,history}.zsh /lib/yk_support_for_zsh
+
 ln -s /lib/yk_support_for_sh/yk_support.sh /etc/shrc.d

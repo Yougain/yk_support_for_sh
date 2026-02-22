@@ -1,0 +1,4 @@
+## zsh editor
+#
+autoload zed
+
