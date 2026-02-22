@@ -1,20 +1,6 @@
-#!/bin/env bash
+#!/bin/bash
 
-. gy_support
+. $(dirname $0)/gyi
 
-
-install end.sh err.sh fpid.sh local_profile.sh _temp_path.sh temp_path.sh /usr/local/lib/yk_support_for_sh
-install yk_support.sh /usr/local/etc/shrc.d
-
-#install_lines /etc/skel/.zshrc <<END
-install_lines .zshrc .bashrc <<END
-    for i in /usr/local/etc/shrc.d/*.sh; do
-        if [ "\$i" = "/usr/local/etc/shrc.d/*.sh" ]; then
-            break
-        fi
-        if [ -r "\$i" ]; then
-            . "\$i"
-        fi
-    done
-    unset i
-END
+install end.sh err.sh fpid.sh local_profile.sh _temp_path.sh temp_path.sh yk_support.sh /lib/yk_support_for_sh
+ln -s /lib/yk_support_for_sh/yk_support.sh /etc/shrc.d
