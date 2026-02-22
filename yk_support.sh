@@ -1,4 +1,4 @@
-　
+
 if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
     . "$YK_PREFIX/lib/yk_support_for_sh/err.sh"
     __yk_support_for_sh_loaded(){
@@ -25,6 +25,7 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
                 for SH in $XSH sh; do
                     YK_SUPPORT_LIB_SH="$YK_PREFIX/lib/yk_support_for_$SH"
                     YK_SUPPORT_SHRC_D="$YK_PREFIX/etc/yk_support_for_$SH/$SH"rc.d
+                    echo "$YK_SUPPORT_LIB_SH/$module_name.$SH"
                     if [ -f "$YK_SUPPORT_LIB_SH/$module_name.$SH" ]; then
                         local yk_module_path="$YK_SUPPORT_LIB_SH/$module_name.$SH"
                         local module_content=""
