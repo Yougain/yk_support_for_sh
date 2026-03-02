@@ -43,8 +43,10 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
                 eval "vnc=\$${vn}"
                 if [ -z "$vnc" ]; then
                     err "Module '$module_name' not found." >&2
+                    return 1
                 fi
             done
+            return 0
         }
         __yk_load_profile_d(){
             local XSH
