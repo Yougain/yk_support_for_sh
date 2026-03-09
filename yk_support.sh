@@ -4,6 +4,10 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
     __yk_support_for_sh_loaded(){
         require(){
             local i
+            if [ "$1" = "-q" ]; then
+                shift
+                local query=1
+            fi
             for i in "$@"; do
                 local vn=YK_SUPPORT_FOR_SH_MODULES_LOADED_OF_$i
                 eval "local vnc=\$${vn}"
@@ -42,6 +46,9 @@ if ! type __yk_support_for_sh_loaded >/dev/null 2>&1; then
                 done
                 eval "vnc=\$${vn}"
                 if [ -z "$vnc" ]; then
+                    if [ -n "$query" ]; then
+                        return 1
+                    fi
                     err "Module '$module_name' not found." >&2
                     return 1
                 fi
