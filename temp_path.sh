@@ -7,13 +7,6 @@ END << 'EOF'
 EOF
 
 
-if [ "$SYS_BOOT_ID" != "$(awk '/^btime/ {print $2}' /proc/stat)" ]; then
-    echo "System boot ID has changed." >&2
-    echo "Press any key to exit." >&2
-    read -n 1 -s
-    exit 1
-fi
-
 local dir
 for dir in /tmp/yk_tmp_dir.*; do
     if [ -w "$dir" ];then
@@ -32,3 +25,21 @@ for dir in /tmp/yk_tmp_dir.*; do
     fi
 done
 
+local d
+for dir in /var/tmp/yk_tmp_ipc.*/*; do
+    if [ -w "$dir" ];then
+        d="${dir##*/}"
+        if [ ${d%-*} != "$SYS_BOOT_ID" ]; then
+			echo `date '+%Y-%m-%d %H:%M:%S.%3N'` zsh\[$$\] erasing $dir by old SYSBOOT_ID >> "/tmp/zsh_erase_tmp_dir.log"
+            rm -rf "$dir"
+        else
+            fpid="${d##*-}"
+            pid0="${fpid#*.}"
+            pid1="${pid0%.*}"
+            if ! kill -0 "$pid1" >/dev/null 2>&1; then
+				echo `date '+%Y-%m-%d %H:%M:%S.%3N'` zsh\[$$\] erasing $dir by non active zsh\[$pid1\] >> "/tmp/zsh_erase_tmp_dir.log"
+                rm -rf "$dir"
+            fi
+        fi
+    fi
+done
